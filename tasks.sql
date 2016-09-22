@@ -173,3 +173,19 @@ FROM
 WHERE subjects.sb_name NOT IN ('Химия','Физика')
 GROUP BY students.st_id, students.st_name
 ;
+
+--11--
+SELECT
+  st_id,
+  st_name
+FROM students
+MINUS
+  SELECT DISTINCT
+    st_id,
+    st_name
+  FROM
+    education
+    JOIN students ON st_id = ed_student
+  WHERE
+    ed_mark = 10
+;
