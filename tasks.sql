@@ -189,3 +189,15 @@ MINUS
   WHERE
     ed_mark = 10
 ;
+
+--12--
+SELECT
+  sb_id,
+  sb_name,
+  AVG(ed_mark)
+FROM
+  education
+  JOIN subjects ON sb_id = ed_subject
+GROUP BY sb_id, sb_name
+HAVING AVG(ed_mark) > (SELECT AVG(education.ed_mark) FROM education)
+;
