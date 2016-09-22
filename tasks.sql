@@ -143,3 +143,16 @@ FROM
 GROUP BY short_date, maxclasses
 ORDER BY short_date DESC
 ;
+
+--9--
+SELECT
+  students.st_id,
+  students.st_name,
+  AVG(education.ed_mark) AS avg
+FROM
+  education
+  JOIN students ON education.ed_student = students.st_id
+GROUP BY students.st_id, students.st_name
+HAVING AVG(education.ed_mark) < (SELECT AVG(education.ed_mark) FROM education)
+ORDER BY students.st_id ASC
+;
