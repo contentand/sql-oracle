@@ -201,3 +201,45 @@ FROM
 GROUP BY sb_id, sb_name
 HAVING AVG(ed_mark) > (SELECT AVG(education.ed_mark) FROM education)
 ;
+
+--13--
+SELECT
+  sb_id,
+  sb_name,
+  (classes / difference) AS classes_per_month
+FROM
+  (
+  SELECT
+    sb_id,
+    sb_name,
+    difference,
+    COUNT(ed_id) AS classes
+  FROM
+    education
+    JOIN
+    (
+    SELECT 
+      ed_subject AS ed_sb, 
+      (
+        EXTRACT(MONTH FROM max_date) 
+        - EXTRACT(MONTH FROM min_date) 
+        + 1
+        + 12 * (
+            EXTRACT(YEAR FROM max_date)
+            - EXTRACT(YEAR FROM min_date)
+          )
+        ) AS difference
+    FROM
+      (
+      SELECT 
+        ed_subject,
+        MIN(ed_date) AS min_date,
+        MAX(ed_date) AS max_date
+      FROM education
+      GROUP BY ed_subject
+      )
+    ) ON ed_subject = ed_sb
+    JOIN subjects ON sb_id = ed_subject
+    GROUP BY sb_id, sb_name, difference
+  )
+;
