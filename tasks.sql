@@ -156,3 +156,20 @@ GROUP BY students.st_id, students.st_name
 HAVING AVG(education.ed_mark) < (SELECT AVG(education.ed_mark) FROM education)
 ORDER BY students.st_id ASC
 ;
+
+--10--
+SELECT
+  st_id,
+  st_name
+FROM students
+MINUS
+SELECT DISTINCT
+  students.st_id,
+  students.st_name
+FROM
+  education
+  JOIN students ON students.st_id = education.ed_student
+  JOIN subjects ON subjects.sb_id = education.ed_subject
+WHERE subjects.sb_name NOT IN ('Химия','Физика')
+GROUP BY students.st_id, students.st_name
+;
