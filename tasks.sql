@@ -243,3 +243,19 @@ FROM
     GROUP BY sb_id, sb_name, difference
   )
 ;
+
+--14--
+SELECT
+  st_id,
+  st_name,
+  sb_id,
+  sb_name,
+  AVG(ed_mark) AS avg
+FROM
+  education
+  JOIN students ON st_id = ed_student
+  JOIN subjects ON sb_id = ed_subject
+WHERE
+  sb_id NOT IN (SELECT ed_subject FROM education WHERE ed_class_type = 2 AND ed_student = st_id)
+GROUP BY st_id, st_name, sb_id, sb_name;
+
