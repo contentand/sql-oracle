@@ -272,3 +272,14 @@ FROM
 GROUP BY tt_id, tt_name
 ORDER BY tt_id
 ;
+
+--16-- 
+SELECT
+  tt_id,
+  tt_name
+FROM
+  tutors
+  LEFT JOIN education ON tt_id = ed_tutor
+GROUP BY tt_id, tt_name
+HAVING SUM(ed_mark) IS NULL
+;
