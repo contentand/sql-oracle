@@ -418,3 +418,19 @@ SELECT
 GROUP BY st_name, classes
 HAVING COUNT(*) = 1
 ;
+
+--25--  ISSUE: Subject Order does not match
+SELECT
+  tt_name,
+  sb_name, 
+  st_name,
+  MAX(ed_mark) AS max
+FROM
+  education
+  JOIN tutors ON ed_tutor = tt_id
+  JOIN subjects ON ed_subject = sb_id
+  JOIN students ON ed_student = st_id
+GROUP BY tt_name, sb_name, st_name
+HAVING MAX(ed_mark) IS NOT NULL
+ORDER BY tt_name DESC, sb_name DESC, st_name DESC, max ASC
+;
