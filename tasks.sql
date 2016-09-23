@@ -453,3 +453,14 @@ HAVING
     GROUP BY ed_student
     )
 ;
+
+--27--
+SELECT
+  sb_name,
+  COUNT(ed_id) AS classes
+FROM
+  subjects
+  LEFT JOIN education ON sb_id = ed_subject
+GROUP BY sb_name
+HAVING COUNT(ed_id) = 0
+;
