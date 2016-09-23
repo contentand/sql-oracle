@@ -261,3 +261,14 @@ GROUP BY st_id, st_name, sb_id, sb_name
 ORDER BY avg DESC
 ;
 
+--15-- ISSUE: classes 0 is not displayed
+SELECT
+  tt_id,
+  tt_name,
+  COUNT(ed_id) AS classes
+FROM
+  education
+  JOIN tutors ON tt_id = ed_tutor
+GROUP BY tt_id, tt_name
+ORDER BY tt_id
+;
