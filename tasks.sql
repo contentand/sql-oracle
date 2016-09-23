@@ -295,3 +295,16 @@ FROM
 GROUP BY tt_id, tt_name
 ORDER BY marks DESC
 ;
+
+--18-- ISSUE: Null goes before NOT NULL
+SELECT
+  sb_name,
+  st_name,
+  TO_CHAR(AVG(ed_mark), '99.9999') AS avg
+FROM
+  education
+  JOIN students ON st_id = ed_student
+  JOIN subjects ON sb_id = ed_subject
+GROUP BY sb_name, st_name
+ORDER BY sb_name ASC, avg DESC
+;
