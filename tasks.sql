@@ -338,3 +338,25 @@ FROM
 GROUP BY st_name
 ORDER BY max DESC, st_name ASC
 ;
+
+--21--
+SELECT
+  st_name,
+  COUNT(ed_mark) AS bad_marks
+FROM
+  education
+  JOIN students ON ed_student = st_id
+WHERE
+  ed_mark < 5
+GROUP BY st_name
+HAVING 
+  COUNT(ed_mark) IN (
+    SELECT
+      MAX(COUNT(ed_mark)) AS max_bad_marks
+    FROM
+      education
+    WHERE
+      ed_mark < 5
+    GROUP BY ed_student
+  )
+;
