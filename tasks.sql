@@ -379,3 +379,42 @@ HAVING
     GROUP BY ed_student
     )
 ;
+
+--23--
+SELECT
+  tt_id,
+  tt_name,
+  COUNT(ed_id) AS classes
+FROM
+  tutors
+  LEFT JOIN education ON tt_id = ed_tutor
+GROUP BY tt_id, tt_name
+ORDER BY classes DESC
+;
+
+--24--
+SELECT 
+  st_name,
+  classes
+  FROM
+    (
+      SELECT
+        st_name,
+        COUNT(ed_id) AS classes
+      FROM
+        education
+        JOIN students ON ed_student = st_id
+      GROUP BY st_name
+      HAVING 
+        COUNT(ed_id) IN
+         (
+          SELECT
+            MAX(COUNT(ed_id)) AS classes
+          FROM
+            education
+          GROUP BY ed_student
+          )
+    )
+GROUP BY st_name, classes
+HAVING COUNT(*) = 1
+;
