@@ -360,3 +360,22 @@ HAVING
     GROUP BY ed_student
   )
 ;
+
+--22--
+SELECT
+  st_name,
+  COUNT(ed_id) AS classes
+FROM
+  education
+  JOIN students ON ed_student = st_id
+GROUP BY st_name
+HAVING 
+  COUNT(ed_id) IN
+   (
+    SELECT
+      MAX(COUNT(ed_id)) AS classes
+    FROM
+      education
+    GROUP BY ed_student
+    )
+;
