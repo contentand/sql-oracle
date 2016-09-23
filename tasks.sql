@@ -485,3 +485,29 @@ WHERE
   AND
   ed_mark IS NULL
 ;
+
+--29--
+SELECT
+  sb_name,
+  COUNT(ed_id) AS exams
+FROM
+  education
+  JOIN subjects ON sb_id = ed_subject
+WHERE 
+  ed_class_type = 2
+  AND
+  EXTRACT(YEAR FROM ed_date) = '2012'
+GROUP BY sb_name
+HAVING 
+  COUNT(ed_id) IN (
+    SELECT
+      MAX(COUNT(ed_id)) AS exams
+    FROM
+      education
+    WHERE 
+      ed_class_type = 2
+      AND
+      EXTRACT(YEAR FROM ed_date) = '2012'
+    GROUP BY ed_subject
+  )
+;
