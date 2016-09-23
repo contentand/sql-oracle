@@ -283,3 +283,15 @@ FROM
 GROUP BY tt_id, tt_name
 HAVING SUM(ed_mark) IS NULL
 ;
+
+--17--
+SELECT
+  tt_id,
+  tt_name,
+  COUNT(ed_mark) AS marks
+FROM
+  tutors
+  LEFT JOIN education ON tt_id = ed_tutor
+GROUP BY tt_id, tt_name
+ORDER BY marks DESC
+;
