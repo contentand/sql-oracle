@@ -257,5 +257,7 @@ FROM
   JOIN subjects ON sb_id = ed_subject
 WHERE
   sb_id NOT IN (SELECT ed_subject FROM education WHERE ed_class_type = 2 AND ed_student = st_id)
-GROUP BY st_id, st_name, sb_id, sb_name;
+GROUP BY st_id, st_name, sb_id, sb_name
+ORDER BY avg DESC
+;
 
