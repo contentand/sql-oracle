@@ -308,3 +308,33 @@ FROM
 GROUP BY sb_name, st_name
 ORDER BY sb_name ASC, avg DESC
 ;
+
+--19-- ISSUE: Null goes before NOT NULL
+SELECT
+  st_name,
+  short_date,
+  TO_CHAR(AVG(ed_mark), '99.9999') AS avg
+FROM
+  (
+  SELECT
+    st_name,
+    TO_CHAR(ed_date, 'yyyymm') AS short_date,
+    ed_mark
+  FROM
+    education
+    JOIN students ON st_id = ed_student
+  )
+GROUP BY st_name, short_date
+ORDER BY st_name ASC, avg DESC
+;
+
+--20--
+SELECT
+  st_name,
+  MAX(ed_mark) AS max
+FROM
+  education
+  JOIN students ON st_id = ed_student
+GROUP BY st_name
+ORDER BY max DESC, st_name ASC
+;
