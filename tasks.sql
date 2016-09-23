@@ -434,3 +434,22 @@ GROUP BY tt_name, sb_name, st_name
 HAVING MAX(ed_mark) IS NOT NULL
 ORDER BY tt_name DESC, sb_name DESC, st_name DESC, max ASC
 ;
+
+--26--
+SELECT
+  st_name,
+  SUM(ed_mark) AS sum
+FROM
+  education
+  JOIN students ON ed_student = st_id
+GROUP BY st_name
+HAVING 
+  SUM(ed_mark) IN
+   (
+    SELECT
+      MIN(SUM(ed_mark)) AS sum
+    FROM
+      education
+    GROUP BY ed_student
+    )
+;
