@@ -464,3 +464,24 @@ FROM
 GROUP BY sb_name
 HAVING COUNT(ed_id) = 0
 ;
+
+--28--
+SELECT
+  ed_id,
+  ed_student,
+  ed_tutor,
+  ed_subject,
+  ed_class_type,
+  ed_mark,
+  ed_date
+FROM
+  education
+  JOIN classes_types ON ed_class_type = ct_id
+  JOIN subjects ON ed_subject = sb_id
+WHERE
+  ct_name = 'Лабораторная работа'
+  AND
+  sb_name = 'Химия'
+  AND
+  ed_mark IS NULL
+;
