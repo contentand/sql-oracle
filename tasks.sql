@@ -511,3 +511,49 @@ HAVING
     GROUP BY ed_subject
   )
 ;
+
+--30-- ISSUE: Total interval should be adjusted
+SELECT
+  sb_id,
+  sb_name,
+  TO_CHAR((exams / difference), '0.9999') AS exams_per_month
+FROM
+  (
+  SELECT
+    sb_id,
+    sb_name,
+    difference,
+    COUNT(ed_id) AS exams
+  FROM
+    education
+    JOIN
+    (
+    SELECT 
+      ed_subject AS ed_sb, 
+      (
+        EXTRACT(MONTH FROM max_date) 
+        - EXTRACT(MONTH FROM min_date) 
+        + 1
+        + 12 * (
+            EXTRACT(YEAR FROM max_date)
+            - EXTRACT(YEAR FROM min_date)
+          )
+        ) AS difference
+    FROM
+      (
+      SELECT 
+        ed_subject,
+        MIN(ed_date) AS min_date,
+        MAX(ed_date) AS max_date
+      FROM education
+      GROUP BY ed_subject
+      )
+    ) ON ed_subject = ed_sb
+    JOIN subjects ON sb_id = ed_subject
+    WHERE 
+      ed_class_type = 2
+      AND
+      ed_subject = 1
+    GROUP BY sb_id, sb_name, difference
+  )
+;
